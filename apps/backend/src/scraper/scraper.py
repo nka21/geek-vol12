@@ -24,3 +24,32 @@ def get_hackathon_events(page):
         link = event.find("a", href=True)
         if link:
             event_urls.append(link["href"])
+
+
+def main():
+    previous_events = set()
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+
+        while True:
+            current_events = set(get_hackathon_events(page))
+
+            # 新しいイベントが追加されているかチェック
+            new_events = current_events - previous_events
+            if new_events:
+                for event in new_events:
+                    print(f"新しいイベントが追加されました: {event}")
+
+            # 前回のイベントリストを更新
+            previous_events = current_events
+
+            # 1時間ごとにチェック（3600秒）
+            time.sleep(3600)
+
+        browser.close()
+
+
+if __name__ == "__main__":
+    main()
