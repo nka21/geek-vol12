@@ -1,4 +1,3 @@
-# scraper.py
 import time
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
@@ -25,30 +24,40 @@ def get_hackathon_events(page):
         if link:
             event_urls.append(link["href"])
 
+    return event_urls
+
 
 def main():
     previous_events = set()
+    run_time = 0
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
 
-        while True:
-            current_events = set(get_hackathon_events(page))
+            while run_time < 3600:  # 1時間（3600秒）でループを停止
+                current_events = set(get_hackathon_events(page))
 
-            # 新しいイベントが追加されているかチェック
-            new_events = current_events - previous_events
-            if new_events:
-                for event in new_events:
-                    print(f"新しいイベントが追加されました: {event}")
+                # 新しいイベントが追加されているかチェック
+                new_events = current_events - previous_events
+                if new_events:
+                    for event in new_events:
+                        print(f"新しいイベントが追加されました: {event}")
 
-            # 前回のイベントリストを更新
-            previous_events = current_events
+                # 前回のイベントリストを更新
+                previous_events = current_events
 
-            # 1時間ごとにチェック（3600秒）
-            time.sleep(3600)
+                # 1時間ごとにチェック（3600秒）
+                time.sleep(3600)
 
-        browser.close()
+                run_time += 3600
+
+    except Exception as e:
+        print(f"エラーが発生しました: {e}")
+
+    finally:
+        browser.close()  # ブラウザを閉じる
 
 
 if __name__ == "__main__":
