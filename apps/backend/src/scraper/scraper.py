@@ -20,7 +20,9 @@ def get_hackathon_events():
     soup = BeautifulSoup(driver.page_source, "html.parser")
 
     # イベント情報を取得
-    events = soup.find_all("div", class_="event-list")
+    events = soup.find_all(
+        "div", class_="event-list"
+    )  # ←取得したいクラスに書き換える必要がある。
     event_urls = []
 
     for event in events:
