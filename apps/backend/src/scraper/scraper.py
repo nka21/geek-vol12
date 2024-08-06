@@ -1,33 +1,26 @@
 # scraper.py
 import time
-from selenium import webdriver
+from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
-# SeleniumのWebDriver設定（Chromeを使用）
-options = webdriver.ChromeOptions()
-options.add_argument("--headless")
-driver = webdriver.Chrome(options=options)
-
+# 公式サイトのURL
 url = "https://talent.supporterz.jp/geekcamp/"
 
 
-def get_hackathon_events():
+def get_hackathon_events(page):
     # Webページを読み込む
-    driver.get(url)
-    time.sleep(3)
+    page.goto(url)
+    page.wait_for_timeout(3000)
 
-    # BeautifulSoupで解析
-    soup = BeautifulSoup(driver.page_source, "html.parser")
+    # PlaywrightとBeautifulSoupでHTMLを解析
+    content = page.content()
+    soup = BeautifulSoup(content, "html.parser")
 
-    # イベント情報を取得
-    events = soup.find_all(
-        "div", class_="event-list"
-    )  # ←取得したいクラスに書き換える必要がある。
+    # イベント情報を取得（ex：イベントリストのクラスが "event-item" の場合）
+    events = soup.find_all("div", class_="event-item")
+
     event_urls = []
-
     for event in events:
         link = event.find("a", href=True)
         if link:
             event_urls.append(link["href"])
-
-    return event_urls
