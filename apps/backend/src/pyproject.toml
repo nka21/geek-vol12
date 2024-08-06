@@ -8,8 +8,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 scrapy = "^2.11.2"
-playwright = "^1.45.1"
-scrapy-playwright = "^0.0.40"
 
 
 [build-system]
