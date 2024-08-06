@@ -1,12 +1,15 @@
 import time
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
+import os
 
 # 公式サイトのURL
 url = "https://talent.supporterz.jp/geekcamp/"
 
+stop_flag_file = "stop_flag.txt"
 
-def get_hackathon_events(page):
+
+def get_hackathon_events(page) -> list:
     # Webページを読み込む
     page.goto(url)
     page.wait_for_timeout(3000)
@@ -29,14 +32,14 @@ def get_hackathon_events(page):
 
 def main():
     previous_events = set()
-    run_time = 0
 
-    try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
 
-            while run_time < 3600:  # 1時間（3600秒）でループを停止
+        # プログラムはバックグラウンドで実行されているので、終了するには終了フラグファイルを作成する。
+        try:
+            while not os.path.exists(stop_flag_file):
                 current_events = set(get_hackathon_events(page))
 
                 # 新しいイベントが追加されているかチェック
@@ -51,13 +54,10 @@ def main():
                 # 1時間ごとにチェック（3600秒）
                 time.sleep(3600)
 
-                run_time += 3600
-
-    except Exception as e:
-        print(f"エラーが発生しました: {e}")
-
-    finally:
-        browser.close()  # ブラウザを閉じる
+        finally:
+            browser.close()
+            if os.path.exists(stop_flag_file):
+                os.remove(stop_flag_file)
 
 
 if __name__ == "__main__":
