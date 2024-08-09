@@ -1,6 +1,5 @@
 import scrapy
 from ..items import DynamicScraperItem
-from bs4 import BeautifulSoup
 
 
 class HackathonSpider(scrapy.Spider):
