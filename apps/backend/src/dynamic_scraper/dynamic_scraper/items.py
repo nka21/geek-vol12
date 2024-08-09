@@ -11,4 +11,3 @@ class DynamicScraperItem(scrapy.Item):
     # name = scrapy.Field()
     url = scrapy.Field()
     title = scrapy.Field()
-    date = scrapy.Field()
