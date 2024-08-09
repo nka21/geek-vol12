@@ -96,3 +96,7 @@ DOWNLOAD_HANDLERS = {
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 PLAYWRIGHT_BROWSER_TYPE = "chromium"
 FEED_EXPORT_ENCODING = "utf-8"
+PLAYWRIGHT_LAUNCH_OPTIONS = {
+    "headless": False,  # run in the headful mode
+    "timeout": 60 * 1000,  # 60sec
+}
