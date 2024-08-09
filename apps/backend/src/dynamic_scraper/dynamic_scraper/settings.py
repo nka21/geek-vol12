@@ -94,4 +94,5 @@ DOWNLOAD_HANDLERS = {
     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
 }
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+PLAYWRIGHT_BROWSER_TYPE = "chromium"
 FEED_EXPORT_ENCODING = "utf-8"
