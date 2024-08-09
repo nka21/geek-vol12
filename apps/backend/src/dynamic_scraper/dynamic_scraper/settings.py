@@ -100,3 +100,11 @@ PLAYWRIGHT_LAUNCH_OPTIONS = {
     "headless": False,  # run in the headful mode
     "timeout": 60 * 1000,  # 60sec
 }
+
+PLAYWRIGHT_CONTEXTS = {
+    "ja_JP": {
+        "viewport": {"width": 1920, "height": 1080},
+        "locale": "ja-JP",
+        "timezone_id": "Asia/Tokyo",
+    }
+}
