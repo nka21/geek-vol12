@@ -14,10 +14,12 @@ class HackathonSpider(scrapy.Spider):
             )
 
     def parse(self, response):
-        for event in response.css("#events > div > div.container"):
+        outer_containers = response.css(
+            "#events > div > div.container .left.item div.container.outer"
+        )
+
+        for outer_container in outer_containers:
             event_item = DynamicScraperItem()
-            event_item["url"] = event.css("a::attr(href)").get()
-            event_item["title"] = event.css(
-                "div.container.outer dd:nth-of-type(2)::text"
-            ).get()
+            event_item["url"] = outer_container.css("a::attr(href)").get()
+            event_item["title"] = outer_container.css("dd:nth-of-type(2)::text").get()
             yield event_item
