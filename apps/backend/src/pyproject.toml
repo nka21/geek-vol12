@@ -11,6 +11,8 @@ scrapy = "^2.11.2"
 playwright = "^1.45.1"
 scrapy-playwright = "^0.0.40"
 beautifulsoup4 = "^4.12.3"
+asyncio = "^3.4.3"
+twisted = "^24.3.0"
 
 
 [build-system]
